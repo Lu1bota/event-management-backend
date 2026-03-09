@@ -88,7 +88,7 @@ export class AuthService {
       throw new UnauthorizedException('Refresh token expired');
     }
 
-    const user = await this.usersService.getUserById(session.userId);
+    const user = await this.usersService.getMe(session.userId);
 
     if (!user) throw new UnauthorizedException('User not found');
 

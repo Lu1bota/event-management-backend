@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from '../users/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,19 +11,23 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async getMe(id: string): Promise<User | null> {
-    return await this.userRepository.findOne({
+  async getMe(id: string): Promise<User> {
+    const user = await this.userRepository.findOne({
       where: { id },
       select: ['id', 'name', 'email'],
     });
+
+    if (!user) throw new UnauthorizedException('User not found');
+
+    return user;
   }
 
   async getUserByEmail(email: string) {
-    return await this.userRepository.findOne({ where: { email } });
-  }
+    const user = await this.userRepository.findOne({ where: { email } });
 
-  async getUserById(id: string) {
-    return await this.userRepository.findOne({ where: { id } });
+    if (!user) throw new UnauthorizedException('User not found');
+
+    return user;
   }
 
   async createUser(data: RegisterDto) {
