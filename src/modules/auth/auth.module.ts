@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/users.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from '../users/users.module';
-import { AuthGuard } from './auth.guard';
 import { FIFTEEN_MINUTES_SEC } from 'src/constants';
 import { Session } from './session.entity';
 
@@ -20,13 +19,7 @@ import { Session } from './session.entity';
     UsersModule,
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    {
-      provide: 'APP_GUARD',
-      useClass: AuthGuard,
-    },
-  ],
+  providers: [AuthService],
   exports: [AuthService],
 })
 export class AuthModule {}
