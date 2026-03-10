@@ -15,6 +15,7 @@ export class UsersService {
     const user = await this.userRepository.findOne({
       where: { id },
       select: ['id', 'name', 'email'],
+      relations: ['organizedEvents', 'participations'],
     });
 
     if (!user) throw new UnauthorizedException('User not found');
@@ -32,6 +33,7 @@ export class UsersService {
 
   async createUser(data: RegisterDto) {
     const user = this.userRepository.create(data);
+
     return await this.userRepository.save(user);
   }
 }

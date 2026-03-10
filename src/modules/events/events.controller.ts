@@ -101,4 +101,26 @@ export class EventsController {
 
     return await this.eventsService.deleteEvent(userId, eventId);
   }
+
+  @Post(':id/join')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Join an event' })
+  async joinEvent(@Req() req: Request, @Param('id') eventId: string) {
+    const userId = req['user']?.id;
+
+    if (!userId) throw new UnauthorizedException('User not authenticated');
+
+    return await this.eventsService.joinEvent(userId, eventId);
+  }
+
+  @Post(':id/leave')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Leave an event' })
+  async leaveEvent(@Req() req: Request, @Param('id') eventId: string) {
+    const userId = req['user']?.id;
+
+    if (!userId) throw new UnauthorizedException('User not authenticated');
+
+    return await this.eventsService.leaveEvent(userId, eventId);
+  }
 }
