@@ -6,6 +6,10 @@ Backend for an Event Management system. Supports user registration, event creati
 
 ## 🗂 API
 
+## 📖 API Documentation
+
+Interactive Swagger documentation is available at [`/api-docs`](http://localhost:5000/api-docs) after starting the server.
+
 ### 🔐 Authentication
 
 | Method | Endpoint         | Description                        |
