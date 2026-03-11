@@ -50,4 +50,6 @@ export class Event {
 
   @OneToMany(() => Participant, (participation) => participation.event)
   participations: Participant[];
+
+  participantCount?: number;
 }

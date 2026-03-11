@@ -21,14 +21,20 @@ export class EventsService {
   ) {}
 
   async getEvents(): Promise<Event[]> {
-    return await this.eventRepository.find();
+    return await this.eventRepository
+      .createQueryBuilder('event')
+      .loadRelationCountAndMap('event.participantCount', 'event.participations')
+      .getMany();
   }
 
   async getEventById(eventId: string): Promise<Event> {
-    const event = await this.eventRepository.findOne({
-      where: { id: eventId },
-      relations: ['organizer', 'participations'],
-    });
+    const event = await this.eventRepository
+      .createQueryBuilder('event')
+      .leftJoinAndSelect('event.organizer', 'organizer')
+      .leftJoinAndSelect('event.participations', 'participations')
+      .loadRelationCountAndMap('event.participantCount', 'event.participations')
+      .where('event.id = :eventId', { eventId })
+      .getOne();
 
     if (!event) throw new UnauthorizedException('Event not found');
 
@@ -88,7 +94,14 @@ export class EventsService {
       throw new ConflictException('You have already joined this event');
     }
 
-    const participant = this.participantRepository.create({ userId, eventId });
+    if (event.participantCount === event.capacity) {
+      throw new BadRequestException('Event is already at full capacity');
+    }
+
+    const participant = this.participantRepository.create({
+      userId,
+      eventId,
+    });
 
     return await this.participantRepository.save(participant);
   }

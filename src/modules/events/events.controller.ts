@@ -121,6 +121,8 @@ export class EventsController {
 
     if (!userId) throw new UnauthorizedException('User not authenticated');
 
-    return await this.eventsService.leaveEvent(userId, eventId);
+    await this.eventsService.leaveEvent(userId, eventId);
+
+    return { message: 'Successfully left the event' };
   }
 }
