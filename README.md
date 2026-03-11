@@ -71,7 +71,7 @@ JWT_REFRESHTOKEN_SECRET=your_refresh_secret
 ### Docker
 
 ```bash
-docker compose up
+docker compose up --build
 ```
 
 > Migrations run automatically on container startup.  
