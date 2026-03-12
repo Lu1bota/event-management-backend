@@ -24,11 +24,7 @@ export class UsersService {
   }
 
   async getUserByEmail(email: string) {
-    const user = await this.userRepository.findOne({ where: { email } });
-
-    if (!user) throw new UnauthorizedException('User not found');
-
-    return user;
+    return (await this.userRepository.findOne({ where: { email } })) ?? null;
   }
 
   async createUser(data: RegisterDto) {
