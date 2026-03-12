@@ -6,6 +6,10 @@ Backend for an Event Management system. Supports user registration, event creati
 
 ## 🗂 API
 
+## 📖 API Documentation
+
+Interactive Swagger documentation is available at [`/api-docs`](http://localhost:5000/api-docs) after starting the server.
+
 ### 🔐 Authentication
 
 | Method | Endpoint         | Description                        |
@@ -67,7 +71,7 @@ JWT_REFRESHTOKEN_SECRET=your_refresh_secret
 ### Docker
 
 ```bash
-docker compose up
+docker compose up --build
 ```
 
 > Migrations run automatically on container startup.  
