@@ -135,6 +135,14 @@ export class AuthService {
     });
   }
 
+  async validateSession(userId: string, accessToken: string): Promise<boolean> {
+    const session = await this.sessionRepository.findOne({
+      where: { userId, accessToken },
+    });
+
+    return !!session;
+  }
+
   public async generateTokens(user: User): Promise<TokensResponseDto> {
     const payload: PayloadDto = {
       id: user.id,

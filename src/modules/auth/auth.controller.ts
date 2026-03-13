@@ -94,7 +94,7 @@ export class AuthController {
 
   @Public()
   @Post('logout')
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'User logout' })
   @ApiResponse({
     status: 200,

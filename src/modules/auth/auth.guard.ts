@@ -9,12 +9,14 @@ import { PayloadDto } from './dto/jwt-payload.dto';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from '../../decorators/public.decorator';
 import { Reflector } from '@nestjs/core';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private reflector: Reflector,
+    private readonly authService: AuthService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -34,6 +36,10 @@ export class AuthGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync<PayloadDto>(token, {
         secret: process.env.JWT_ACCESSTOKEN_SECRET,
       });
+
+      const isValid = await this.authService.validateSession(payload.id, token);
+
+      if (!isValid) throw new UnauthorizedException();
 
       request['user'] = payload;
     } catch {
