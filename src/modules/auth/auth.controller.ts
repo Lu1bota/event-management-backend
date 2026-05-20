@@ -35,8 +35,15 @@ export class AuthController {
     description: 'Successfully authenticated. Returns tokens.',
     type: LoginDtoResponse,
   })
-  async register(@Body() registerDto: RegisterDto): Promise<LoginDtoResponse> {
-    return await this.authService.register(registerDto);
+  async register(
+    @Body() registerDto: RegisterDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<LoginDtoResponse> {
+    const session = await this.authService.register(registerDto);
+
+    this.authService.setupSession(res, session);
+
+    return { accessToken: session.accessToken };
   }
 
   @Public()

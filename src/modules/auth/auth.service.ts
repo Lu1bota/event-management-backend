@@ -6,7 +6,6 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
-import { LoginDtoResponse } from './dto/login-response.dto';
 import * as bcrypt from 'bcryptjs';
 import { RegisterDto } from './dto/register.dto';
 import { User } from '../users/users.entity';
@@ -28,7 +27,7 @@ export class AuthService {
     private readonly sessionRepository: Repository<Session>,
   ) {}
 
-  async register(data: RegisterDto): Promise<LoginDtoResponse> {
+  async register(data: RegisterDto): Promise<Session> {
     const user = await this.usersService.getUserByEmail(data.email);
 
     if (user) throw new ConflictException('Email in use');
@@ -40,9 +39,14 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    const { accessToken } = await this.generateTokens(newUser);
+    const tokens = await this.generateTokens(newUser);
 
-    return { accessToken };
+    const newSession = this.sessionRepository.create({
+      userId: newUser.id,
+      ...tokens,
+    });
+
+    return await this.sessionRepository.save(newSession);
   }
 
   async login(data: LoginDto): Promise<Session> {
