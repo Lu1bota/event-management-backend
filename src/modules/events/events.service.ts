@@ -30,7 +30,6 @@ export class EventsService {
   async getEventById(eventId: string): Promise<Event> {
     const event = await this.eventRepository
       .createQueryBuilder('event')
-      .leftJoinAndSelect('event.organizer', 'organizer')
       .leftJoinAndSelect('event.participations', 'participations')
       .loadRelationCountAndMap('event.participantCount', 'event.participations')
       .where('event.id = :eventId', { eventId })
@@ -94,7 +93,7 @@ export class EventsService {
       throw new ConflictException('You have already joined this event');
     }
 
-    if (event.participantCount === event.capacity) {
+    if (event.capacity !== null && event.participantCount === event.capacity) {
       throw new BadRequestException('Event is already at full capacity');
     }
 
@@ -103,7 +102,15 @@ export class EventsService {
       eventId,
     });
 
-    return await this.participantRepository.save(participant);
+    const savedParticipant = await this.participantRepository.save(participant);
+
+    return {
+      ...savedParticipant,
+      event: {
+        title: event.title,
+        dateTime: event.dateTime,
+      },
+    };
   }
 
   async leaveEvent(userId: string, eventId: string) {

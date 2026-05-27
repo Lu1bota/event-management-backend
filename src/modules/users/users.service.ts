@@ -15,7 +15,7 @@ export class UsersService {
     const user = await this.userRepository.findOne({
       where: { id },
       select: ['id', 'name', 'email'],
-      relations: ['organizedEvents', 'participations'],
+      relations: ['organizedEvents', 'participations', 'participations.event'],
     });
 
     if (!user) throw new UnauthorizedException('User not found');
