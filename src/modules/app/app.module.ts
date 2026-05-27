@@ -2,15 +2,17 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppDataSource } from 'src/database/data-source';
 import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../users/users.module';
 import { EventsModule } from '../events/events.module';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from '../auth/auth.guard';
+import { AppDataSource } from '../../database/data-source';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       ...AppDataSource.options,
       autoLoadEntities: true,
@@ -20,12 +22,6 @@ import { AuthGuard } from '../auth/auth.guard';
     EventsModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule {}

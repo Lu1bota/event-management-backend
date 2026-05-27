@@ -5,19 +5,23 @@ import { Event } from './events.entity';
 @Entity('participants')
 export class Participant {
   @PrimaryColumn()
-  userId: string;
+  userId!: string;
 
   @PrimaryColumn()
-  eventId: string;
+  eventId!: string;
 
   @Column({ default: () => 'NOW()' })
-  joinedAt: Date;
+  joinedAt!: Date;
 
-  @ManyToOne(() => User, (user) => user.participations)
+  @ManyToOne(() => User, (user) => user.participations, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'userId' })
-  user: User;
+  user!: User;
 
-  @ManyToOne(() => Event, (event) => event.participations)
+  @ManyToOne(() => Event, (event) => event.participations, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'eventId' })
-  event: Event;
+  event!: Event;
 }

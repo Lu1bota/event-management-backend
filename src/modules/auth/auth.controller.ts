@@ -13,9 +13,9 @@ import { LoginDto } from './dto/login.dto';
 import { LoginDtoResponse } from './dto/login-response.dto';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
-import { Public } from 'src/decorators/public.decorator';
 import type { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
+import { Public } from '../../decorators/public.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')

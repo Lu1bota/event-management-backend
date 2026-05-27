@@ -1,4 +1,4 @@
-import { Visibility } from 'src/modules/events/entities/events.entity';
+import { Visibility } from '../../../modules/events/entities/events.entity';
 
 export const usersData = [
   {

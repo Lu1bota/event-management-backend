@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
-import { Event } from 'src/modules/events/entities/events.entity';
-import { User } from 'src/modules/users/users.entity';
 import { eventsData, usersData } from './constants';
+import { User } from '../../modules/users/users.entity';
+import { Event } from '../../modules/events/entities/events.entity';
 
 export const runSeed = async (dataSource: DataSource) => {
   const userRepository = dataSource.getRepository(User);

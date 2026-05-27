@@ -10,13 +10,14 @@ import * as bcrypt from 'bcryptjs';
 import { RegisterDto } from './dto/register.dto';
 import { User } from '../users/users.entity';
 import { PayloadDto } from './dto/jwt-payload.dto';
-import { FIFTEEN_MINUTES_MS, ONE_DAY_MS, ONE_DAY_SEC } from 'src/constants';
 import { TokensResponseDto } from './dto/tokens-response.dto';
 import { Session } from './session.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RefreshSessionRequestDto } from './dto/refresh-session-request.dto';
 import { Response } from 'express';
+import { FIFTEEN_MINUTES_MS, ONE_DAY_MS, ONE_DAY_SEC } from '../../constants';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +26,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     @InjectRepository(Session)
     private readonly sessionRepository: Repository<Session>,
+    private readonly configService: ConfigService,
   ) {}
 
   async register(data: RegisterDto): Promise<Session> {
@@ -156,7 +158,7 @@ export class AuthService {
 
     const accessToken = await this.jwtService.signAsync(payload);
     const refreshToken = await this.jwtService.signAsync(payload, {
-      secret: process.env.JWT_REFRESHTOKEN_SECRET,
+      secret: this.configService.get<string>('JWT_REFRESHTOKEN_SECRET'),
       expiresIn: ONE_DAY_SEC,
     });
 

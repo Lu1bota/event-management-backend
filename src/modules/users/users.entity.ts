@@ -5,20 +5,20 @@ import { Event } from '../events/entities/events.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ unique: true })
-  email: string;
+  email!: string;
 
   @Column()
-  password: string;
+  password!: string;
 
   @Column({ nullable: true })
-  name: string;
+  name!: string;
 
   @OneToMany(() => Event, (event) => event.organizer)
-  organizedEvents: Event[];
+  organizedEvents!: Event[];
 
   @OneToMany(() => Participant, (participation) => participation.user)
-  participations: Participant[];
+  participations!: Participant[];
 }

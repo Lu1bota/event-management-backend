@@ -17,39 +17,39 @@ export enum Visibility {
 @Entity('events')
 export class Event {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column('text')
-  description: string;
+  description!: string;
 
   @Column('timestamp with time zone')
-  dateTime: Date;
+  dateTime!: Date;
 
   @Column()
-  location: string;
+  location!: string;
 
   @Column({ type: 'int', nullable: true })
-  capacity: number | null;
+  capacity!: number | null;
 
   @Column({
     type: 'enum',
     enum: Visibility,
     default: Visibility.PUBLIC,
   })
-  visibility: Visibility;
+  visibility!: Visibility;
 
   @Column()
-  organizerId: string;
+  organizerId!: string;
 
   @ManyToOne(() => User, (user) => user.organizedEvents)
   @JoinColumn({ name: 'organizerId' })
-  organizer: User;
+  organizer!: User;
 
   @OneToMany(() => Participant, (participation) => participation.event)
-  participations: Participant[];
+  participations!: Participant[];
 
   participantCount?: number;
 }
